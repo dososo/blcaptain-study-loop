@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Rust CLI 契约检查卡</title>
+  <style>
+    :root { --ink:#171412; --paper:#faf8f2; --line:#d8d0c0; --rust:#b7410e; --blue:#204f9b; --panel:#fff; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.55; }
+    main { width:min(980px,calc(100vw - 36px)); margin:0 auto; padding:34px 0 48px; }
+    header { display:flex; justify-content:space-between; gap:20px; border-bottom:3px solid var(--ink); padding-bottom:16px; margin-bottom:18px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:44px; line-height:1.05; margin:0; letter-spacing:0; }
+    .badge { align-self:flex-start; background:var(--rust); color:white; border-radius:999px; padding:7px 12px; font-weight:800; white-space:nowrap; }
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    h2 { margin:0 0 8px; font-size:20px; color:var(--rust); }
+    ul { margin:0; padding-left:20px; }
+    li { margin:6px 0; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    .wide { grid-column:1 / -1; border-color:var(--blue); }
+    @media (max-width:760px) { header { flex-direction:column; } .grid { grid-template-columns:1fr; } }
+    @media print { body { background:white; } main { width:100%; padding:16px; } section { break-inside:avoid; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Rust CLI 契约检查卡</h1>
+      <div class="badge">交付前必过</div>
+    </header>
+    <div class="grid">
+      <section>
+        <h2>1. 用户</h2>
+        <ul>
+          <li>谁会运行这个命令？</li>
+          <li>他熟不熟悉 Rust？如果不熟，错误提示必须更直白。</li>
+          <li>他是在本地、CI，还是共享机器上运行？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>2. 命令</h2>
+        <ul>
+          <li>动词是否具体: <code>process</code>、<code>check</code>、<code>explain</code>。</li>
+          <li>参数是否暴露输入和输出，不藏在内部假设里。</li>
+          <li><code>--help</code> 是否有真实例子。</li>
+        </ul>
+      </section>
+      <section>
+        <h2>3. 输出</h2>
+        <ul>
+          <li>输出给人看，还是给程序读？</li>
+          <li>是否稳定到能被下游脚本依赖？</li>
+          <li>是否需要 <code>--format json</code> 或 <code>--quiet</code>？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>4. 失败</h2>
+        <ul>
+          <li>缺文件、格式错、不可写、未知错误是否分开？</li>
+          <li>stderr 是否给修复动作？</li>
+          <li>退出码是否能被测试或 CI 使用？</li>
+        </ul>
+      </section>
+      <section class="wide">
+        <h2>最小验收句</h2>
+        <p>一个不熟悉项目细节的团队成员，能只看 README 和 <code>--help</code>，用一个真实输入跑出可用输出，并能看懂至少两个失败提示。</p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

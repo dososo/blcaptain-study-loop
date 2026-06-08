@@ -3,23 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>0001 · RAG 面试诊断</title>
   <style>
-    body { margin:0; background:#f8f7f2; color:#111; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.6; }
-    main { width:min(900px,calc(100vw - 40px)); margin:0 auto; padding:40px 0; }
-    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:44px; margin:0 0 16px; }
-    .box { background:#fff; border:1px solid #111; padding:16px; margin:14px 0; }
+    :root { --ink:#151515; --paper:#f7f4ed; --panel:#fff; --line:#d7ccbd; --blue:#2454a6; --red:#b7352d; --green:#13795b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.62; }
+    main { width:min(1100px,calc(100vw - 40px)); margin:0 auto; padding:42px 0 54px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:clamp(34px,5vw,58px); line-height:1.05; margin:0 0 12px; letter-spacing:0; }
+    h2 { margin:0 0 10px; font-size:23px; }
+    p { margin:0 0 12px; }
+    header { background:#102340; color:white; border-radius:8px; padding:24px; margin-bottom:16px; }
+    header p { color:#dce7ff; max-width:780px; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    .span-5 { grid-column:span 5; }
+    .span-7 { grid-column:span 7; }
+    .span-12 { grid-column:span 12; }
+    button { display:block; width:100%; text-align:left; border:1px solid var(--ink); background:white; border-radius:6px; padding:10px 12px; margin:8px 0; font-weight:750; cursor:pointer; }
+    button:hover { background:#f0ebe1; }
+    #feedback { border:1px dashed var(--blue); background:#f7fbff; border-radius:6px; padding:12px; min-height:82px; margin-top:10px; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th,td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; vertical-align:top; }
+    th { color:var(--blue); }
+    .ok { color:var(--green); font-weight:850; }
+    .bad { color:var(--red); font-weight:850; }
+    @media (max-width:860px) { .span-5,.span-7 { grid-column:span 12; } }
   </style>
 </head>
 <body>
   <main>
-    <h1>RAG 面试诊断</h1>
-    <div class="box">
-      <p>诊断题：为什么 RAG 不能保证答案一定正确？请从检索质量、上下文选择和生成三个环节回答。</p>
-    </div>
-    <div class="box">
-      <p>合格答案要点：可能检索不到、检索到噪声、上下文过长或冲突、模型仍可能误读或编造。</p>
-    </div>
+    <header>
+      <h1>RAG 面试先诊断，不先背答案</h1>
+      <p>本节只做一件事：判断学习者是否能把 RAG 从概念讲到失败模式。只有能回答追问，才算进入 E2。</p>
+    </header>
+
+    <section class="grid">
+      <article class="card span-5">
+        <h2>诊断题</h2>
+        <p>面试官问：RAG 能不能解决大模型幻觉？你怎么答？</p>
+        <button data-answer="bad1">能。因为 RAG 会把资料喂给模型。</button>
+        <button data-answer="bad2">不能。大模型一定会幻觉。</button>
+        <button data-answer="good">不能保证。RAG 只是在资料可检索、上下文组织正确、模型遵循上下文时降低风险。</button>
+        <div id="feedback">点击一个答案，查看反馈。</div>
+      </article>
+
+      <article class="card span-7">
+        <h2>90 秒答题结构</h2>
+        <table>
+          <thead><tr><th>段落</th><th>要说什么</th><th>避免什么</th></tr></thead>
+          <tbody>
+            <tr><td>定义</td><td>RAG 是检索外部资料后再生成答案。</td><td>只说“接知识库”。</td></tr>
+            <tr><td>链路</td><td>query、retrieve、rerank、assemble、generate、evaluate。</td><td>跳过检索质量。</td></tr>
+            <tr><td>价值</td><td>补新知识、可追溯、减少纯参数记忆依赖。</td><td>承诺一定准确。</td></tr>
+            <tr><td>失败</td><td>召回不到、上下文污染、模型不遵循资料。</td><td>只说调 prompt。</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-12">
+        <h2>写入 progress 的条件</h2>
+        <p>能把“RAG 是否解决幻觉”答成有条件、有边界、有失败模式，才算 E2。只会背定义是 E1。</p>
+      </article>
+    </section>
   </main>
+  <script>
+    const feedback = document.getElementById('feedback');
+    const messages = {
+      bad1: '<span class="bad">风险很大。</span> 这会被追问击穿，因为检索到资料不等于模型一定正确使用资料。',
+      bad2: '<span class="bad">过于绝对。</span> 面试中要说条件和边界，而不是否定一切。',
+      good: '<span class="ok">更稳。</span> 它说明了 RAG 的价值，也承认了前提条件和失败模式。'
+    };
+    document.querySelectorAll('button[data-answer]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedback.innerHTML = messages[button.dataset.answer];
+      });
+    });
+  </script>
 </body>
 </html>

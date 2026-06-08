@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>团队内部 CLI 发布检查卡</title>
+  <style>
+    :root { --ink:#151515; --paper:#f6f3ec; --panel:#fff; --line:#d6cfc0; --green:#146c43; --red:#b7352d; --blue:#194f90; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.55; }
+    main { width:min(1040px,calc(100vw - 36px)); margin:0 auto; padding:34px 0 46px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:46px; line-height:1.05; margin:0 0 10px; letter-spacing:0; }
+    .lead { max-width:760px; margin-bottom:20px; color:#5f5a52; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    h2 { margin:0 0 8px; font-size:19px; color:var(--blue); }
+    .pass h2 { color:var(--green); }
+    .risk h2 { color:var(--red); }
+    ul { margin:0; padding-left:19px; }
+    li { margin:7px 0; }
+    .wide { grid-column:1 / -1; border:2px solid var(--green); }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    @media (max-width:860px) { .grid { grid-template-columns:1fr; } }
+    @media print { body { background:white; } main { width:100%; padding:16px; } section { break-inside:avoid; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>团队内部 CLI 发布检查卡</h1>
+    <p class="lead">这张卡用于判断一个 Rust CLI 是否已经从“我机器上能跑”进入“团队可以试用”。不满足这些条件时，不要把 progress 写成 E3。</p>
+    <div class="grid">
+      <section>
+        <h2>安装</h2>
+        <ul>
+          <li>是否说明支持系统和 shell？</li>
+          <li>是否提供一种最小安装方式？</li>
+          <li>是否能在干净目录运行？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>帮助</h2>
+        <ul>
+          <li><code>--help</code> 是否说明用途？</li>
+          <li>每个参数是否有默认值或约束？</li>
+          <li>是否包含真实命令例子？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>样例</h2>
+        <ul>
+          <li>是否有成功输入样例？</li>
+          <li>是否有失败输入样例？</li>
+          <li>输出是否可 diff？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>测试</h2>
+        <ul>
+          <li>帮助文案 smoke test。</li>
+          <li>成功路径 smoke test。</li>
+          <li>至少 2 个失败路径测试。</li>
+        </ul>
+      </section>
+      <section class="risk">
+        <h2>风险</h2>
+        <ul>
+          <li>路径、权限、编码和换行。</li>
+          <li>同事的输入文件不干净。</li>
+          <li>错误提示只有作者看得懂。</li>
+        </ul>
+      </section>
+      <section class="pass">
+        <h2>通过标准</h2>
+        <ul>
+          <li>2 个团队成员独立跑通。</li>
+          <li>失败时不用问作者也知道下一步。</li>
+          <li>README 可以直接复制命令。</li>
+        </ul>
+      </section>
+      <section class="wide">
+        <h2>最终一句话</h2>
+        <p>内部 CLI 的发布标准不是“功能写完”，而是“目标用户能独立安装、运行、理解错误、完成一次真实任务”。</p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

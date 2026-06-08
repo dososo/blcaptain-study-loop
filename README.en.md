@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | **English**
 
-[![Version](https://img.shields.io/badge/version-v0.1.0-2f6fed)](VERSION)
+[![Version](https://img.shields.io/badge/version-v0.2.0-2f6fed)](VERSION)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
 [![Skill](https://img.shields.io/badge/skill-blcaptain--study--loop-7c3aed)](blcaptain-study-loop/SKILL.md)
 [![Examples](https://img.shields.io/badge/examples-3_workspaces-f59e0b)](examples/)
@@ -32,9 +32,9 @@ It should not stop at a learning plan. It helps Codex create a minimal learning 
 
 This repository includes 3 example workspaces:
 
-- [`examples/01-technical-understanding`](examples/01-technical-understanding/): Explain `useEffect` dependency arrays in 30 minutes.
-- [`examples/02-delivery-project`](examples/02-delivery-project/): Build an image-to-video storyboard prompt skill in one day.
-- [`examples/03-interview-prep`](examples/03-interview-prep/): Prepare for a 20-minute RAG interview.
+- [`examples/01-rust-cli-delivery`](examples/01-rust-cli-delivery/): Flagship example. Learn Rust while shipping a team-internal CLI in two weeks, showing how a delivery goal becomes sources, lessons, cards, evidence, and reviews.
+- [`examples/02-delivery-project`](examples/02-delivery-project/): Build an image-to-video storyboard prompt skill in one day, showing the path from creative idea to installable skill and forward test.
+- [`examples/03-interview-prep`](examples/03-interview-prep/): Prepare for a 20-minute RAG interview, showing how an interview goal starts with diagnostics, pressure questions, and review loops.
 
 ## What It Can Do
 
@@ -195,7 +195,7 @@ Yes. Keep goal routing, evidence levels, `SOURCEBOOK.md`, and `REVIEWS.md` first
 
 ## Version
 
-Current version: `v0.1.0`
+Current version: `v0.2.0`
 
 See [`VERSION`](VERSION).
 

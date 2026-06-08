@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>0002 · Forward Test 质量门禁</title>
+  <style>
+    :root { --ink:#111; --paper:#f7f4ee; --panel:#fff; --line:#d6cabc; --purple:#6d3fb5; --orange:#c5531a; --green:#147a57; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.6; }
+    main { width:min(1120px,calc(100vw - 40px)); margin:0 auto; padding:42px 0 52px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:clamp(34px,5vw,56px); line-height:1.06; margin:0 0 14px; letter-spacing:0; }
+    h2 { margin:0 0 10px; font-size:22px; }
+    p { margin:0 0 12px; }
+    .hero { background:#24152f; color:#fff; border-radius:8px; padding:24px; margin-bottom:16px; }
+    .hero p { color:#eadff2; max-width:760px; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    .span-4 { grid-column:span 4; }
+    .span-5 { grid-column:span 5; }
+    .span-7 { grid-column:span 7; }
+    .span-12 { grid-column:span 12; }
+    blockquote { margin:0; padding:14px 16px; background:#fff7ed; border-left:5px solid var(--orange); }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th,td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; vertical-align:top; }
+    th { color:var(--purple); }
+    .ok { color:var(--green); font-weight:850; }
+    .warn { color:var(--orange); font-weight:850; }
+    @media (max-width:860px) { .span-4,.span-5,.span-7 { grid-column:span 12; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Forward test 不是演示，是防止 skill 自嗨的门禁</h1>
+      <p>本节用一张模拟图片描述检查 prompt pack: 是否尊重事实、镜头是否连续、负面约束是否有效、创作者能否继续使用。</p>
+    </section>
+
+    <section class="grid">
+      <article class="card span-5">
+        <h2>测试输入</h2>
+        <blockquote>
+          一张产品海报: 桌面上有一只银色金属水杯，背景是清晨厨房，侧逆光，画面干净，品牌想表达耐用和轻量。
+        </blockquote>
+      </article>
+      <article class="card span-7">
+        <h2>正确拆分</h2>
+        <table>
+          <thead><tr><th>字段</th><th>应该写什么</th></tr></thead>
+          <tbody>
+            <tr><td>Image Facts</td><td>水杯、桌面、厨房、侧逆光、干净画面。</td></tr>
+            <tr><td>Creative Intent</td><td>耐用、轻量、清晨生活感。</td></tr>
+            <tr><td>Continuity Locks</td><td>同一水杯、同一厨房、同一光线方向。</td></tr>
+            <tr><td>Negative Prompts</td><td>变形、错字、额外 logo、杯子材质改变。</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-4">
+        <h2>门禁 1: 事实锁定</h2>
+        <p class="ok">只把看见或用户明确提供的内容写成事实。</p>
+        <p class="warn">不要凭空写“杯中有咖啡”“logo 是某品牌”。</p>
+      </article>
+      <article class="card span-4">
+        <h2>门禁 2: 镜头连续</h2>
+        <p>4 个镜头可以变化机位和景别，但主体、材质、光线方向不能跳变。</p>
+      </article>
+      <article class="card span-4">
+        <h2>门禁 3: 可执行</h2>
+        <p>每个镜头 prompt 都要包含主体、动作、镜头、光线和约束，不写空泛形容词堆。</p>
+      </article>
+
+      <article class="card span-12">
+        <h2>通过以后才写 progress</h2>
+        <p>如果只是生成了一份漂亮 prompt，但没有检查事实幻觉和连续性，只能算 E1。通过 forward test 的质量门禁后，才记录为 E2。</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

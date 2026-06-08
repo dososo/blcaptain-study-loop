@@ -3,24 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Skill 交付检查卡</title>
+  <link rel="icon" href="data:,">
+  <title>图片分镜 Skill 交付检查卡</title>
   <style>
-    body { margin:0; background:#f8f7f2; color:#111; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.6; }
-    main { width:min(820px,calc(100vw - 40px)); margin:0 auto; padding:40px 0; }
-    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:40px; margin:0 0 14px; }
-    li { margin:8px 0; }
+    :root { --ink:#151515; --paper:#faf7f1; --panel:#fff; --line:#d8cec0; --purple:#6046b7; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.55; }
+    main { width:min(960px,calc(100vw - 36px)); margin:0 auto; padding:34px 0 46px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:44px; line-height:1.06; margin:0 0 18px; letter-spacing:0; }
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    h2 { margin:0 0 8px; color:var(--purple); font-size:20px; }
+    ul { margin:0; padding-left:20px; }
+    li { margin:6px 0; }
+    .wide { grid-column:1 / -1; border:2px solid var(--purple); }
+    @media (max-width:780px) { .grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <main>
-    <h1>Skill 交付检查卡</h1>
-    <ol>
-      <li>Frontmatter name/description 是否能正确触发？</li>
-      <li>第一步是否明确？</li>
-      <li>输出文件是否有模板？</li>
-      <li>是否跑过 quick_validate.py？</li>
-      <li>是否有 forward test？</li>
-    </ol>
+    <h1>图片分镜 Skill 交付检查卡</h1>
+    <div class="grid">
+      <section>
+        <h2>触发</h2>
+        <ul>
+          <li>用户是否提供图片或图片描述？</li>
+          <li>用户是否明确要视频分镜或视频 prompt？</li>
+          <li>缺少用途时，是否最多问 3 个问题？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>事实</h2>
+        <ul>
+          <li>Image Facts 是否只写可见内容？</li>
+          <li>创作推断是否单独标注？</li>
+          <li>是否避免品牌、人物身份和隐藏情绪幻觉？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>分镜</h2>
+        <ul>
+          <li>每镜是否有景别、机位、运动和主体动作？</li>
+          <li>镜头之间是否保持主体连续？</li>
+          <li>是否有节奏和收束镜头？</li>
+        </ul>
+      </section>
+      <section>
+        <h2>验证</h2>
+        <ul>
+          <li>是否做过 forward test？</li>
+          <li>是否检查负面提示词？</li>
+          <li>是否说明下一步真实图片测试？</li>
+        </ul>
+      </section>
+      <section class="wide">
+        <h2>最小可用标准</h2>
+        <p>一份 prompt pack 能被创作者直接复制到视频工具里试跑，并且看得出哪些内容来自图片事实、哪些内容是创作建议。</p>
+      </section>
+    </div>
   </main>
 </body>
 </html>

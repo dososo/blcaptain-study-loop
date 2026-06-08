@@ -3,23 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>0001 · Skill 最小交付</title>
+  <link rel="icon" href="data:,">
+  <title>0001 · 图片分镜 Skill 最小交付</title>
   <style>
-    body { margin:0; background:#f8f7f2; color:#111; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.6; }
-    main { width:min(900px,calc(100vw - 40px)); margin:0 auto; padding:40px 0; }
-    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:44px; margin:0 0 16px; }
-    .box { background:#fff; border:1px solid #111; padding:16px; margin:14px 0; }
+    :root { --ink:#151515; --paper:#f8f7f2; --panel:#fff; --line:#d8d2c7; --violet:#5b4bb7; --cyan:#0b7285; --rose:#b8325d; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.62; }
+    main { width:min(1100px,calc(100vw - 40px)); margin:0 auto; padding:42px 0 54px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:clamp(34px,5vw,58px); line-height:1.05; margin:0 0 12px; letter-spacing:0; }
+    h2 { margin:0 0 10px; font-size:23px; }
+    p { margin:0 0 12px; }
+    header { display:grid; grid-template-columns:1.2fr .8fr; gap:18px; align-items:stretch; margin-bottom:18px; }
+    .hero { background:var(--panel); border:1px solid var(--line); border-top:8px solid var(--violet); border-radius:8px; padding:22px; }
+    .route { background:#101828; color:white; border-radius:8px; padding:22px; }
+    .route p { color:#dbe5ff; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    .span-4 { grid-column:span 4; }
+    .span-6 { grid-column:span 6; }
+    .span-12 { grid-column:span 12; }
+    .pill { display:inline-block; border:1px solid var(--ink); border-radius:999px; padding:3px 9px; font-size:12px; font-weight:800; margin-right:5px; }
+    pre { background:#25212b; color:#fff3f7; border-radius:8px; padding:14px; overflow:auto; line-height:1.55; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th,td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; vertical-align:top; }
+    th { color:var(--violet); }
+    .warn { color:var(--rose); font-weight:850; }
+    .ok { color:var(--cyan); font-weight:850; }
+    @media (max-width:860px) { header { grid-template-columns:1fr; } .span-4,.span-6 { grid-column:span 12; } }
   </style>
 </head>
 <body>
   <main>
-    <h1>Skill 最小交付</h1>
-    <div class="box">
-      <p>一个可用 skill 至少要回答四件事：何时触发、按什么步骤执行、留下什么产物、如何验证。</p>
-    </div>
-    <div class="box">
-      <p>练习：用一句话写出你的 skill 触发条件，然后列出第一个 forward test。</p>
-    </div>
+    <header>
+      <section class="hero">
+        <p><span class="pill">一天 MVP</span><span class="pill">交付型 + 创作型</span></p>
+        <h1>一个图片分镜 skill，最小可交付不是“会写 prompt”</h1>
+        <p>它至少要能触发、能输出结构化 prompt pack、能区分图片事实和创作推断、能跑一次 forward test。</p>
+      </section>
+      <aside class="route">
+        <h2>为什么不是普通对话</h2>
+        <p>普通对话会直接给一段分镜 prompt。这个 skill 要留下可复用工作流，让下一张图也能稳定产出。</p>
+      </aside>
+    </header>
+
+    <section class="grid">
+      <article class="card span-4">
+        <h2>1. 触发条件</h2>
+        <p>用户提供图片或图片描述，并希望生成视频分镜提示词。</p>
+        <p class="warn">不触发: 用户只是问图片好不好看。</p>
+      </article>
+      <article class="card span-4">
+        <h2>2. 输出契约</h2>
+        <p>输出不是一段长 prompt，而是一份 <code>STORYBOARD-PROMPT-PACK.md</code>。</p>
+        <p class="ok">结构越清楚，越容易验证。</p>
+      </article>
+      <article class="card span-4">
+        <h2>3. Forward test</h2>
+        <p>用一个模拟图片描述跑完整流程，检查事实、镜头、连续性和负面约束。</p>
+      </article>
+
+      <article class="card span-6">
+        <h2>Prompt pack 骨架</h2>
+        <pre><code># STORYBOARD-PROMPT-PACK
+
+## Image Facts
+只写图里能看见的事实。
+
+## Creative Intent
+用户目标、情绪、用途和节奏。
+
+## Shots
+1. 镜头大小 / 机位 / 运动 / 主体动作 / prompt
+
+## Continuity Locks
+主体、光线、环境、颜色、材质。
+
+## Negative Prompts
+避免事实幻觉、变形、错字、额外物体。</code></pre>
+      </article>
+
+      <article class="card span-6">
+        <h2>练习: 哪句话不能写进 Image Facts?</h2>
+        <table>
+          <thead><tr><th>候选句</th><th>判断</th></tr></thead>
+          <tbody>
+            <tr><td>桌面上有一只银色金属水杯。</td><td class="ok">可以，来自画面事实。</td></tr>
+            <tr><td>品牌想表达耐用和轻量。</td><td class="warn">不能放事实，应放 Creative Intent。</td></tr>
+            <tr><td>背景是清晨厨房，侧逆光。</td><td class="ok">可以，如果图片里确实可见。</td></tr>
+            <tr><td>杯子里装着热咖啡。</td><td class="warn">不能，除非图片可见或用户说明。</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-12">
+        <h2>本节产物</h2>
+        <p>本节结束后，progress 只能记录“能定义可交付 skill 输出契约”，还不能记录“能适配所有图片”。这就是证据门控。</p>
+      </article>
+    </section>
   </main>
 </body>
 </html>

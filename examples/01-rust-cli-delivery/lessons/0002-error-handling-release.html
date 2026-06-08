@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>0002 · Rust CLI 错误处理与内部发布</title>
+  <style>
+    :root {
+      --ink: #141414;
+      --muted: #64615c;
+      --paper: #f7f5ef;
+      --panel: #ffffff;
+      --line: #d8d1c4;
+      --red: #b7352d;
+      --teal: #0f766e;
+      --blue: #1f4f99;
+      --gold: #a16207;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; line-height: 1.62; }
+    main { width: min(1160px, calc(100vw - 40px)); margin: 0 auto; padding: 42px 0 56px; }
+    header { display: grid; grid-template-columns: 1fr 360px; gap: 24px; align-items: stretch; margin-bottom: 22px; }
+    h1 { font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(34px, 5vw, 58px); line-height: 1.05; margin: 0 0 12px; letter-spacing: 0; }
+    h2 { margin: 0 0 12px; font-size: 24px; }
+    h3 { margin: 0 0 8px; font-size: 18px; }
+    p { margin: 0 0 12px; }
+    .hero { border-top: 8px solid var(--red); background: var(--panel); padding: 24px; border-radius: 8px; border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .side { background: #14213d; color: #fff; border-radius: 8px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
+    .side p { color: #e6edf7; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    .metric { font-size: 42px; font-weight: 900; color: var(--red); line-height: 1; }
+    .muted { color: var(--muted); }
+    pre { background: #211d1a; color: #fff7ef; padding: 14px; border-radius: 8px; overflow: auto; line-height: 1.55; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: left; vertical-align: top; }
+    th { color: var(--blue); }
+    .scenario { border-left: 5px solid var(--gold); }
+    .exercise { background: #f0fbf9; border: 2px solid var(--teal); }
+    .choices { display: grid; gap: 8px; margin-top: 10px; }
+    button { text-align: left; border: 1px solid var(--ink); background: white; border-radius: 6px; padding: 10px 12px; font-weight: 750; cursor: pointer; }
+    button:hover { background: #ece7dc; }
+    #feedback { margin-top: 12px; padding: 12px; background: white; border: 1px dashed var(--teal); border-radius: 6px; min-height: 72px; }
+    .ok { color: var(--teal); font-weight: 850; }
+    .bad { color: var(--red); font-weight: 850; }
+    footer { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    @media (max-width: 900px) {
+      header { grid-template-columns: 1fr; }
+      .span-3, .span-4, .span-6, .span-8 { grid-column: span 12; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <section class="hero">
+        <p class="muted">BLCaptain Study Loop · Evidence-Gated Progress</p>
+        <h1>Rust 错误处理不是语法点，是 CLI 能不能给同事用的分水岭</h1>
+        <p>本节只练一个能力：把 `Result` 和退出码转成团队成员看得懂、能修复、愿意继续用的错误体验。</p>
+      </section>
+      <aside class="side">
+        <div>
+          <div class="metric">4</div>
+          <p>本节验收 4 类失败场景：缺文件、格式错、输出不可写、未知错误。</p>
+        </div>
+        <p>如果只会写成功路径，这个 CLI 还不能内部发布。</p>
+      </aside>
+    </header>
+
+    <section class="grid">
+      <article class="card span-3">
+        <h2>缺文件</h2>
+        <p>不要 panic。显示路径、原因和下一步。</p>
+        <pre><code>error: input not found
+path: ./sample/in.txt
+try: check the file path</code></pre>
+      </article>
+      <article class="card span-3">
+        <h2>格式错</h2>
+        <p>尽量告诉用户行号、字段或示例格式。</p>
+        <pre><code>error: invalid row
+line: 18
+expected: name,email</code></pre>
+      </article>
+      <article class="card span-3">
+        <h2>不可写</h2>
+        <p>输出目录不存在或权限不足，要说清楚。</p>
+        <pre><code>error: cannot write
+out: ./report/result.json
+try: create directory</code></pre>
+      </article>
+      <article class="card span-3">
+        <h2>未知错误</h2>
+        <p>保留简短说明，日志另存，不把堆栈扔给用户。</p>
+        <pre><code>error: internal failure
+run with --verbose
+report: issue template</code></pre>
+      </article>
+
+      <article class="card span-8 scenario">
+        <h2>把 Rust 学习绑定到发布验收</h2>
+        <table>
+          <thead>
+            <tr><th>Rust 点</th><th>CLI 用户体验</th><th>发布验收</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Result&lt;T, E&gt;</code></td><td>成功和失败都显式处理</td><td>没有未解释 panic</td></tr>
+            <tr><td><code>?</code> 操作符</td><td>错误可以向上传递</td><td>最终统一转成人话</td></tr>
+            <tr><td>错误枚举</td><td>不同失败有不同提示</td><td>退出码和 stderr 可测试</td></tr>
+            <tr><td>集成测试</td><td>模拟真实命令</td><td>README 示例能跑通</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-4 exercise">
+        <h2>练习：选一个可发布错误提示</h2>
+        <p>输入文件不存在时，哪个错误提示最适合内部 CLI？</p>
+        <div class="choices">
+          <button data-answer="panic">thread 'main' panicked at src/main.rs:42</button>
+          <button data-answer="short">failed</button>
+          <button data-answer="good">input not found: ./data/a.csv. Check the path or run bltool check ./data</button>
+        </div>
+        <div id="feedback">点击一个选项，查看反馈。</div>
+      </article>
+
+      <article class="card span-12">
+        <h2>本节写入 progress 的条件</h2>
+        <p>只有完成下面这张表，才算从 E1 复述进入 E2 应用。</p>
+        <table>
+          <thead>
+            <tr><th>证据</th><th>最低要求</th><th>为什么重要</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>成功路径</td><td>一个真实样例能输出 JSON</td><td>证明 CLI 有用</td></tr>
+            <tr><td>失败路径</td><td>至少 2 个可读错误提示</td><td>证明同事能自助修复</td></tr>
+            <tr><td>帮助文案</td><td>`--help` 有用途、参数、例子</td><td>降低团队试用成本</td></tr>
+            <tr><td>发布检查</td><td>一个非作者同事能按 README 跑通</td><td>证明不是只在作者机器上能用</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <footer>
+      来源: Rust By Example 的错误处理示例、Cargo Book 的测试和运行方式、Command Line Applications in Rust 的 CLI 用户体验实践。具体链接见 SOURCEBOOK.md。
+    </footer>
+  </main>
+  <script>
+    const feedback = document.getElementById('feedback');
+    const messages = {
+      panic: '<span class="bad">不适合发布。</span> panic 是给开发者排查的，不是给团队用户使用的错误提示。',
+      short: '<span class="bad">信息太少。</span> 用户不知道哪个文件、为什么错、下一步怎么修。',
+      good: '<span class="ok">适合内部试用。</span> 它说明了路径、原因和可执行的修复动作。'
+    };
+    document.querySelectorAll('button[data-answer]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedback.innerHTML = messages[button.dataset.answer];
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>0002 · RAG 失败模式压力追问</title>
+  <style>
+    :root { --ink:#141414; --paper:#f8f5ed; --panel:#fff; --line:#d8ccbd; --blue:#1d4d8f; --orange:#b45309; --green:#13795b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif; line-height:1.62; }
+    main { width:min(1120px,calc(100vw - 40px)); margin:0 auto; padding:42px 0 54px; }
+    h1 { font-family:Georgia,"Noto Serif SC",serif; font-size:clamp(34px,5vw,56px); line-height:1.06; margin:0 0 12px; letter-spacing:0; }
+    h2 { margin:0 0 10px; font-size:22px; }
+    p { margin:0 0 12px; }
+    .hero { border-top:8px solid var(--orange); background:var(--panel); border-radius:8px; border-left:1px solid var(--line); border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:24px; margin-bottom:16px; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }
+    .span-4 { grid-column:span 4; }
+    .span-12 { grid-column:span 12; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th,td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; vertical-align:top; }
+    th { color:var(--blue); }
+    .signal { font-weight:850; color:var(--green); }
+    .risk { font-weight:850; color:var(--orange); }
+    @media (max-width:860px) { .span-4 { grid-column:span 12; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>面试追问：RAG 答案不准，你怎么排查？</h1>
+      <p>本节把回答从“调 prompt”升级为诊断路径。面试型学习的价值在于暴露薄弱点，再针对薄弱点复测。</p>
+    </section>
+
+    <section class="grid">
+      <article class="card span-4">
+        <h2>1. 召回问题</h2>
+        <p class="signal">先看相关资料有没有被检索到。</p>
+        <p>检查 query 改写、embedding、chunk 粒度、top-k、过滤条件。</p>
+      </article>
+      <article class="card span-4">
+        <h2>2. 上下文问题</h2>
+        <p class="signal">检索到了，但模型看不懂或被噪声干扰。</p>
+        <p>检查 rerank、chunk 顺序、上下文长度、重复内容和冲突资料。</p>
+      </article>
+      <article class="card span-4">
+        <h2>3. 生成问题</h2>
+        <p class="signal">资料足够，但回答没有按资料来。</p>
+        <p>检查 prompt 约束、引用要求、拒答策略和答案格式。</p>
+      </article>
+
+      <article class="card span-12">
+        <h2>压力追问答题表</h2>
+        <table>
+          <thead><tr><th>面试官追问</th><th>稳的回答路径</th><th>危险回答</th></tr></thead>
+          <tbody>
+            <tr><td>召回差怎么办？</td><td>先看 missed queries，再调 chunk、query rewrite、top-k 和 rerank。</td><td class="risk">换更强模型。</td></tr>
+            <tr><td>幻觉怎么办？</td><td>区分无资料、资料冲突、模型没遵循上下文，再加引用和拒答。</td><td class="risk">加一句“不要幻觉”。</td></tr>
+            <tr><td>延迟太高怎么办？</td><td>看检索、rerank、上下文长度和生成 token，逐段压缩。</td><td class="risk">只说缓存。</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

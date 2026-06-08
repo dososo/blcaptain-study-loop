@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>0001 · Rust CLI 命令契约</title>
+  <style>
+    :root {
+      --ink: #181614;
+      --muted: #6f6a62;
+      --paper: #fbfaf6;
+      --panel: #ffffff;
+      --line: #d9d2c3;
+      --rust: #b7410e;
+      --blue: #2454a6;
+      --green: #176f4d;
+      --code: #27221f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+      line-height: 1.65;
+    }
+    main { width: min(1120px, calc(100vw - 40px)); margin: 0 auto; padding: 44px 0 56px; }
+    header {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 22px;
+      margin-bottom: 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+      gap: 28px;
+      align-items: end;
+    }
+    .eyebrow { color: var(--rust); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+    h1 { font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(34px, 5vw, 62px); line-height: 1.04; margin: 8px 0 12px; letter-spacing: 0; }
+    h2 { font-size: 24px; margin: 0 0 12px; }
+    h3 { font-size: 18px; margin: 0 0 8px; }
+    p { margin: 0 0 12px; }
+    .summary {
+      border-left: 5px solid var(--rust);
+      padding: 14px 16px;
+      background: #fff4ee;
+      font-size: 16px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 100%;
+    }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-7 { grid-column: span 7; }
+    .span-12 { grid-column: span 12; }
+    .tag { display: inline-block; border: 1px solid var(--ink); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 700; margin: 0 6px 8px 0; }
+    .tag.hot { background: var(--rust); color: white; border-color: var(--rust); }
+    .muted { color: var(--muted); }
+    pre {
+      margin: 10px 0 0;
+      background: var(--code);
+      color: #f8efe7;
+      border-radius: 8px;
+      padding: 14px;
+      overflow: auto;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: left; vertical-align: top; }
+    th { color: var(--rust); }
+    .exercise { border: 2px solid var(--blue); background: #f4f8ff; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    button {
+      border: 1px solid var(--ink);
+      background: white;
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { background: #f0ebe1; }
+    .feedback {
+      min-height: 84px;
+      border: 1px dashed var(--blue);
+      padding: 12px;
+      background: white;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+    .ok { color: var(--green); font-weight: 800; }
+    .warn { color: var(--rust); font-weight: 800; }
+    footer { margin-top: 24px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; }
+    @media (max-width: 820px) {
+      header { grid-template-columns: 1fr; }
+      .span-4, .span-5, .span-7 { grid-column: span 12; }
+    }
+    @media print {
+      body { background: white; }
+      main { width: 100%; padding: 20px; }
+      button { display: none; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="eyebrow">BLCaptain Study Loop · Delivery Route</div>
+        <h1>别先学完整 Rust，先设计一个能交付的 CLI 契约</h1>
+        <p class="summary">本节只练一个能力：把“两周学 Rust”转成团队内部 CLI 的命令、输入、输出、失败场景和验收标准。</p>
+      </div>
+      <div class="card">
+        <span class="tag hot">E2 目标</span>
+        <span class="tag">交付型</span>
+        <span class="tag">第一轮</span>
+        <p class="muted">完成后应该能写出一个可讨论、可实现、可验收的命令契约，而不是只有学习路线。</p>
+      </div>
+    </header>
+
+    <section class="grid">
+      <article class="card span-4">
+        <h2>普通对话会怎么走</h2>
+        <p>大概率给你 Rust 学习路线：所有权、借用、生命周期、trait、异步、项目实战。</p>
+        <p class="warn">问题是：两周后团队还是没有工具可用。</p>
+      </article>
+
+      <article class="card span-4">
+        <h2>这个 skill 怎么改写</h2>
+        <p>先问真实用途：谁用、处理什么、成功输出是什么、失败时怎么提示。</p>
+        <p class="ok">学习路径由交付物倒推，而不是由知识目录倒推。</p>
+      </article>
+
+      <article class="card span-4">
+        <h2>第一轮只交付什么</h2>
+        <p>一个 CLI 契约草案、一个 `--help` 轮廓、一个 thin slice 命令。</p>
+        <p>Rust 语法只学足够完成这三件事的部分。</p>
+      </article>
+
+      <article class="card span-7">
+        <h2>命令契约模板</h2>
+        <p>先写命令，不急着写实现。一个内部 CLI 最少要让同事看懂这四块。</p>
+        <pre><code>bltool process &lt;input-path&gt; --out &lt;output-path&gt; --format json
+bltool check &lt;input-path&gt; --strict
+bltool explain &lt;error-code&gt;</code></pre>
+        <table>
+          <thead>
+            <tr><th>字段</th><th>要回答的问题</th><th>验收方式</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>动词</td><td>用户到底要做什么动作？</td><td>团队成员能否猜出用途</td></tr>
+            <tr><td>输入</td><td>路径、文件、目录还是 stdin？</td><td>能否用真实样例跑通</td></tr>
+            <tr><td>输出</td><td>写文件、打印文本还是返回 JSON？</td><td>输出是否能被下游使用</td></tr>
+            <tr><td>失败</td><td>用户最可能错在哪里？</td><td>错误提示是否给出修复动作</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-5 exercise">
+        <h2>练习：判断命令是否可交付</h2>
+        <p>下面三个命令里，哪个最适合两周内交付给团队试用？</p>
+        <div class="buttons">
+          <button data-answer="bad1">A. bltool run</button>
+          <button data-answer="good">B. bltool process ./input --out ./report.json</button>
+          <button data-answer="bad2">C. bltool magic --all</button>
+        </div>
+        <div id="feedback" class="feedback">点击一个选项，查看反馈。</div>
+      </article>
+
+      <article class="card span-12">
+        <h2>本节产物</h2>
+        <table>
+          <thead>
+            <tr><th>产物</th><th>为什么有价值</th><th>下一步怎么用</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>progress/0001-rust-cli-contract-e2.md</code></td>
+              <td>证明学习者已经把目标转成可验收命令，而不是只听过 Rust 介绍。</td>
+              <td>下一节用这个契约写 `clap` 参数和 thin slice。</td>
+            </tr>
+            <tr>
+              <td><code>cards/0001-rust-cli-contract-card.html</code></td>
+              <td>长期复用的 CLI 设计检查卡。</td>
+              <td>每次新增子命令前先过一遍。</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <footer>
+      来源: The Rust Book, Cargo Book, clap documentation, Command Line Applications in Rust。具体链接见 SOURCEBOOK.md。
+    </footer>
+  </main>
+  <script>
+    const feedback = document.getElementById('feedback');
+    const copy = {
+      bad1: '<span class="warn">还不够。</span> run 太泛，用户不知道处理什么、输出什么、失败时会发生什么。',
+      good: '<span class="ok">更接近可交付。</span> 它暴露输入、输出和格式，团队成员可以拿真实样例验证。',
+      bad2: '<span class="warn">危险。</span> magic 和 --all 都像内部黑箱，难测试，也难给错误提示。'
+    };
+    document.querySelectorAll('button[data-answer]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedback.innerHTML = copy[button.dataset.answer];
+      });
+    });
+  </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 **简体中文** | [English](README.en.md)
 
-[![Version](https://img.shields.io/badge/version-v0.1.0-2f6fed)](VERSION)
+[![Version](https://img.shields.io/badge/version-v0.2.0-2f6fed)](VERSION)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
 [![Skill](https://img.shields.io/badge/skill-blcaptain--study--loop-7c3aed)](blcaptain-study-loop/SKILL.md)
 [![Examples](https://img.shields.io/badge/examples-3_workspaces-f59e0b)](examples/)
@@ -32,9 +32,9 @@ Use $blcaptain-study-loop 我想一天内做出一个根据图片生成视频分
 
 这个仓库里有 3 个示例工作区：
 
-- [`examples/01-technical-understanding`](examples/01-technical-understanding/)：30 分钟讲清 `useEffect` 依赖数组。
-- [`examples/02-delivery-project`](examples/02-delivery-project/)：一天内做出图片转视频分镜提示词 skill。
-- [`examples/03-interview-prep`](examples/03-interview-prep/)：准备 20 分钟 RAG 面试问答。
+- [`examples/01-rust-cli-delivery`](examples/01-rust-cli-delivery/)：旗舰案例。两周内学 Rust 并交付团队内部 CLI，展示交付型目标如何被拆成资料、微课、卡片、证据和复盘。
+- [`examples/02-delivery-project`](examples/02-delivery-project/)：一天内做出图片转视频分镜提示词 skill，展示从创作想法到可安装 skill 和 forward test。
+- [`examples/03-interview-prep`](examples/03-interview-prep/)：准备 20 分钟 RAG 面试问答，展示面试型目标如何先诊断、再追问、再复测。
 
 ## 它能做什么
 
@@ -195,7 +195,7 @@ blcaptain-study-loop/
 
 ## 版本
 
-当前版本：`v0.1.0`
+当前版本：`v0.2.0`
 
 详见 [`VERSION`](VERSION)。
 
