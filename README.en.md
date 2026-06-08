@@ -113,6 +113,12 @@ After installation, invoke it like this:
 Use $blcaptain-study-loop I want to learn how to write a usable Codex skill in one day.
 ```
 
+You can also tie the learning target directly to a real deliverable:
+
+```text
+Use $blcaptain-study-loop I want to learn Rust, with the goal of building a team-internal CLI in two weeks.
+```
+
 If the goal is specific enough, it should start producing useful artifacts. If the target is vague, it asks at most 3 key questions.
 
 A normal loop looks like this:

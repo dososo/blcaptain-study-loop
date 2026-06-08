@@ -113,6 +113,12 @@ Skill 会先判断目标类型，再决定产物：
 Use $blcaptain-study-loop 我想在一天内学会写一个可用的 Codex skill。
 ```
 
+也可以把目标直接绑定到真实交付：
+
+```text
+Use $blcaptain-study-loop 我想学 Rust，目标是两周内写一个团队内部可用的 CLI。
+```
+
 如果目标足够具体，它会直接推进第一轮产物；如果目标还不清楚，它会最多问 3 个关键问题。
 
 一轮正常流程通常是：
