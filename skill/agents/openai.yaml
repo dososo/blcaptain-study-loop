@@ -1,0 +1,7 @@
+interface:
+  display_name: "BLCaptain 学习工作台"
+  short_description: "目标路由、练习证据和阶段复盘驱动的学习操作流"
+  default_prompt: "Use $blcaptain-study-loop 围绕一个具体目标建立证据门控的学习工作台。"
+
+policy:
+  allow_implicit_invocation: true
